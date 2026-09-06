@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: frappemcp
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python server.py"
+    envVars:
+      - key: ERPNEXT_URL
+        value: "https://erp.ravanaindustries.com"
+      - key: API_KEY
+        sync: false
+      - key: API_SECRET
+        sync: false
+      - key: PORT
+        value: "8003"

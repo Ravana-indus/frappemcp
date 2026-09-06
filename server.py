@@ -116,9 +116,9 @@ def enrich_error(error: Exception, doctype: str = None, operation: str = None) -
 # ──────────────────────────────────────────────────────────────
 # Configuration (reads from environment variables)
 # ──────────────────────────────────────────────────────────────
-ERPNEXT_URL = os.getenv("ERPNEXT_URL", "http://localhost:8001")
-API_KEY = os.getenv("API_KEY", "929932f34acbaf3")
-API_SECRET = os.getenv("API_SECRET", "6d3df971fe530ec")
+ERPNEXT_URL = (os.getenv("ERPNEXT_URL") or os.getenv("FRAPPE_URL") or "http://localhost:8001").rstrip("/")
+API_KEY = os.getenv("API_KEY") or os.getenv("FRAPPE_API_KEY") or "929932f34acbaf3"
+API_SECRET = os.getenv("API_SECRET") or os.getenv("FRAPPE_API_SECRET") or "6d3df971fe530ec"
 
 AUTH_HEADERS = {
     "Authorization": f"token {API_KEY}:{API_SECRET}",
@@ -126,13 +126,15 @@ AUTH_HEADERS = {
     "Accept": "application/json",
 }
 
+PORT = int(os.getenv("PORT", "8003"))
+
 # ──────────────────────────────────────────────────────────────
 # MCP Server
 # ──────────────────────────────────────────────────────────────
 mcp = FastMCP(
     "business-claw",
     host="0.0.0.0",
-    port=8003,
+    port=PORT,
 )
 
 
@@ -2053,6 +2055,6 @@ if __name__ == "__main__":
 
     print(f"Starting Business Claw MCP Server ({transport} transport)...")
     if transport == "sse":
-        print(f"  → SSE endpoint: http://0.0.0.0:8003/sse")
+        print(f"  → SSE endpoint: http://0.0.0.0:{PORT}/sse")
         print(f"  → ERPNext URL:  {ERPNEXT_URL}")
     mcp.run(transport=transport)
