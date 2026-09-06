@@ -1,7 +1,7 @@
 services:
   - type: web
     name: frappemcp
-    env: python
+    runtime: python
     plan: free
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python server.py"
@@ -12,5 +12,3 @@ services:
         sync: false
       - key: API_SECRET
         sync: false
-      - key: PORT
-        value: "8003"
